@@ -2,20 +2,12 @@ import java.awt.Toolkit;
 import java.awt.Image;
 import java.awt.Graphics2D;
 
-public class Shot {
-    private Image shotImage;
-    private int shotX;
-    private int shotY;
-    private boolean dead;
-    private int damage;
-
-    public Shot(int x, int y) {
-        shotImage = Toolkit.getDefaultToolkit().createImage("Shot.png");
-        shotX = x;
-        shotY = y;
-        dead = false;
-        damage = 50;
-    }
+public abstract class Shot implements Cloneable {
+    protected Image shotImage;
+    protected int shotX;
+    protected int shotY;
+    protected boolean dead;
+    protected int damage;
 
     public void draw(Graphics2D g) {
         g.drawImage(shotImage, shotX, shotY, null);
@@ -41,7 +33,20 @@ public class Shot {
         dead = true;
     }
 
+    public void shotAlive() {
+        dead = false;
+    }
+
     public int shotDamage() {
         return damage;
+    }
+
+    public void setPos(int x, int y) {
+        shotX = x;
+        shotY = y;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

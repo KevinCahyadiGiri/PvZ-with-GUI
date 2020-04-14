@@ -4,10 +4,10 @@ import java.awt.Graphics2D;
 
 public class RegularZombie extends Zombie {
 
-    public RegularZombie() {
-        zombImage = Toolkit.getDefaultToolkit().createImage("rsz_zombie2.png");
-        zombieX = 900;
-        zombieY = 360;
+    public RegularZombie(int x, int y) {
+        zombImage = Toolkit.getDefaultToolkit().createImage("rsz_zombie.png");
+        zombieX = x;
+        zombieY = y;
         dead = false;
         hp = 100;
     }

@@ -34,6 +34,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     // private List<Peashooter> peaList;
     private List<Plant> plantList;
     // private int count;
+    private ListMap<String, Shot> plantToShot;
 
     public Gameplay() {
         addKeyListener(this);
@@ -48,11 +49,16 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         shotList = new ArrayList<Shot>();
         plantList = new ArrayList<Plant>();
         // peaList = new ArrayList<Peashooter>();
-        zombieList.add(new RegularZombie());
-        shotList.add(new Shot(130,400));
-        shotList.add(new Shot(100,400));
-        plantList.add(new Peashooter(200,300));
+        zombieList.add(new RegularZombie(900,260));
+        zombieList.add(new Zomboss(900,360));
+        shotList.add(new PeaShot(130,400));
+        shotList.add(new PeaShot(100,400));
+        plantList.add(new Mushroom(200,300));
+        plantList.add(new Peashooter(200,500));
         // peaList.add(new Peashooter(200,300));
+        plantToShot = new ListMap<String, Shot>();
+        plantToShot.add("Peashooter", new PeaShot());
+        plantToShot.add("Mushroom", new MushroomShot());
         
         addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseMoved(MouseEvent e) {
@@ -170,8 +176,25 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             for (int i = 0; i < plantList.size(); i++) {
                 if (!plantList.get(i).isDead()) {
                     plantList.get(i).counterPlus();
+                    // System.out.println(plantList.get(i).getClass().getName() + " " + plantList.get(i).getCounter());
                     if (plantList.get(i).getCounter() % 25 == 0) {
-                        shotList.add(new Shot(plantList.get(i).plantGetX()+50, plantList.get(i).plantGetY()-5));
+                        // shotList.add(new PeaShot(plantList.get(i).plantGetX()+50, plantList.get(i).plantGetY()-5));
+                        // System.out.println(plantList.get(i).getClass().getName());
+                        try {
+                            String plantName = plantList.get(i).getClass().getName();
+                            Shot newShot = (Shot) plantToShot.get(plantName).clone();
+                            newShot.setPos(plantList.get(i).plantGetX()+50, plantList.get(i).plantGetY()-5);
+                            shotList.add(newShot);
+                            // System.out.println("tidak error");
+                        }
+                        catch (CloneNotSupportedException err) {
+                            // System.out.println("error");
+                            String plantName = plantList.get(i).getClass().getName();
+                            Shot newShot = plantToShot.get(plantName);
+                            newShot.shotAlive();
+                            newShot.setPos(plantList.get(i).plantGetX()+50, plantList.get(i).plantGetY()-5);
+                            shotList.add(newShot);
+                        }
                     }
                 }
             }

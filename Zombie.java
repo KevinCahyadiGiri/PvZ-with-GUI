@@ -9,9 +9,9 @@ public class Zombie {
     private boolean dead;
 
     public Zombie() {
-        zombImage = Toolkit.getDefaultToolkit().createImage("rsz_zombie.png");
-        zombieX = 1060;
-        zombieY = 410;
+        zombImage = Toolkit.getDefaultToolkit().createImage("rsz_zombie2.png");
+        zombieX = 900;
+        zombieY = 360;
         dead = false;
     }
 
@@ -20,7 +20,7 @@ public class Zombie {
     }
 
     public void zombieWalk() {
-        zombieX -= 1;
+        zombieX -= 5;
     }
 
     public boolean isDead() {

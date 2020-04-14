@@ -36,7 +36,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         timer = new Timer(delay, this);
-        backImage = Toolkit.getDefaultToolkit().createImage("background2.png");
+        backImage = Toolkit.getDefaultToolkit().createImage("background.jpg");
         mouse = new Point();
         // zombie = new Zombie();
         // shot = new Shot();

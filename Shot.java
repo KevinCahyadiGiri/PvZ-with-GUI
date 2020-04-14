@@ -10,8 +10,8 @@ public class Shot {
 
     public Shot() {
         shotImage = Toolkit.getDefaultToolkit().createImage("Shot.png");
-        shotX = 617;
-        shotY = 450;
+        shotX = 130;
+        shotY = 400;
         dead = false;
     }
 
@@ -20,7 +20,7 @@ public class Shot {
     }
 
     public void shotGo() {
-        shotX += 1;
+        shotX += 10;
     }
 
     public boolean isDead() {

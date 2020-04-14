@@ -23,6 +23,7 @@ import java.util.ArrayList;
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private boolean play = false;
     private Timer timer;
+    private Timer timerShot;
     private int delay = 64;
     private Image backImage;
     // private Zombie zombie;
@@ -30,6 +31,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     // private Shot shot;
     private List<Zombie> zombieList;
     private List<Shot> shotList;
+    private List<Peashooter> peaList;
+    // private int count;
 
     public Gameplay() {
         addKeyListener(this);
@@ -42,13 +45,18 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         // shot = new Shot();
         zombieList = new ArrayList<Zombie>();
         shotList = new ArrayList<Shot>();
+        peaList = new ArrayList<Peashooter>();
         zombieList.add(new Zombie());
-        shotList.add(new Shot());
+        shotList.add(new Shot(617,450));
+        shotList.add(new Shot(800,450));
+        peaList.add(new Peashooter(600,325));
+        
         addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseMoved(MouseEvent e) {
                 mouse = e.getPoint();
             }
         });
+        // count = 0;
         timer.start();
     }
 
@@ -56,6 +64,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         // background
         g.drawImage(backImage, 0, 0, null);
 
+        // zombie
         if (zombieList.size() > 0) {
             for (int i = 0; i < zombieList.size(); i++) {
                 if (!zombieList.get(i).isDead()) {
@@ -64,10 +73,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             }
         }
         
+        // shot
         if (shotList.size() > 0) {
             for (int i = 0; i < shotList.size() ; i++) {
                 if (!shotList.get(i).isDead()) {
                     shotList.get(i).draw((Graphics2D) g);
+                }
+            }
+        }
+
+        // peashooter
+        if (peaList.size() > 0) {
+            for (int i = 0; i < peaList.size(); i++) {
+                if (!peaList.get(i).isDead()) {
+                    peaList.get(i).draw((Graphics2D) g);
                 }
             }
         }
@@ -114,16 +133,44 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         //     shot.shotDead();
         // }
 
+        // jika zombie terkena tembakan
         if (zombieList.size() > 0 && shotList.size() > 0) {
             for (int i = 0; i < zombieList.size(); i++) {
                 for (int j = 0; j < shotList.size(); j++) {
+                    // System.out.println("zombie" + i);
+                    // System.out.println("shot " + j);
                     if (new Rectangle(zombieList.get(i).zombieGetX(), zombieList.get(i).zombieGetY(),95,45).intersects(new Rectangle(shotList.get(j).shotGetX(), shotList.get(j).shotGetY(),30,30))) {
-                        zombieList.get(i).zombieDead();
+                        zombieList.get(i).zombieDamage(shotList.get(j).shotDamage());
                         shotList.get(j).shotDead();
+                        shotList.remove(j);
+                        if (zombieList.get(i).zombiehp() <= 0) {
+                            zombieList.get(i).zombieDead();
+                            zombieList.remove(i);
+                            break;
+                        }
                     }
                 }
             }
         }
+
+        // generate shot
+        if (peaList.size() > 0) {
+            for (int i = 0; i < peaList.size(); i++) {
+                if (!peaList.get(i).isDead()) {
+                    peaList.get(i).counterPlus();
+                    if (peaList.get(i).getCounter() % 100 == 0) {
+                        shotList.add(new Shot(peaList.get(i).peaGetX()+50, peaList.get(i).peaGetY()-5));
+                    }
+                }
+            }
+        }
+
+        // generate shot
+        // count++;
+        // if (count % 100 == 0) {
+        //     shotList.add(new Shot(617,450));
+        // }
+
         repaint();
     }
 }

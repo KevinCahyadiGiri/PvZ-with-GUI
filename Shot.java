@@ -7,12 +7,14 @@ public class Shot {
     private int shotX;
     private int shotY;
     private boolean dead;
+    private int damage;
 
-    public Shot() {
+    public Shot(int x, int y) {
         shotImage = Toolkit.getDefaultToolkit().createImage("Shot.png");
-        shotX = 617;
-        shotY = 450;
+        shotX = x;
+        shotY = y;
         dead = false;
+        damage = 50;
     }
 
     public void draw(Graphics2D g) {
@@ -37,5 +39,9 @@ public class Shot {
 
     public void shotDead() {
         dead = true;
+    }
+
+    public int shotDamage() {
+        return damage;
     }
 }

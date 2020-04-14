@@ -7,12 +7,14 @@ public class Zombie {
     private int zombieX;
     private int zombieY;
     private boolean dead;
+    private int hp;
 
     public Zombie() {
         zombImage = Toolkit.getDefaultToolkit().createImage("rsz_zombie.png");
         zombieX = 1060;
         zombieY = 410;
         dead = false;
+        hp = 100;
     }
 
     public void draw(Graphics2D g) {
@@ -37,5 +39,13 @@ public class Zombie {
 
     public void zombieDead() {
         dead = true;
+    }
+
+    public void zombieDamage(int damageTaken) {
+        hp -= damageTaken;
+    }
+
+    public int zombiehp() {
+        return hp;
     }
 }

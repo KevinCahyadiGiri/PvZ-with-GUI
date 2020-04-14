@@ -22,7 +22,7 @@ public class Shot {
     }
 
     public void shotGo() {
-        shotX += 1;
+        shotX += 10;
     }
 
     public boolean isDead() {

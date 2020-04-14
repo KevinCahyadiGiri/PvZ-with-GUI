@@ -2,19 +2,15 @@ import java.awt.Toolkit;
 import java.awt.Image;
 import java.awt.Graphics2D;
 
-public class Zombie {
-    private Image zombImage;
-    private int zombieX;
-    private int zombieY;
-    private boolean dead;
-    private int hp;
+public abstract class Zombie implements Creature {
+    protected int hp;
+    protected boolean dead;
+    protected Image zombImage;
+    protected int zombieX;
+    protected int zombieY;
 
-    public Zombie() {
-        zombImage = Toolkit.getDefaultToolkit().createImage("rsz_zombie.png");
-        zombieX = 1060;
-        zombieY = 410;
-        dead = false;
-        hp = 100;
+    public boolean isDead() {
+        return dead;
     }
 
     public void draw(Graphics2D g) {
@@ -22,11 +18,7 @@ public class Zombie {
     }
 
     public void zombieWalk() {
-        zombieX -= 1;
-    }
-
-    public boolean isDead() {
-        return dead;
+        zombieX -= 5;
     }
 
     public int zombieGetX() {
@@ -41,11 +33,11 @@ public class Zombie {
         dead = true;
     }
 
-    public void zombieDamage(int damageTaken) {
+    public void takeDamage(int damageTaken) {
         hp -= damageTaken;
     }
 
-    public int zombiehp() {
+    public int getHp() {
         return hp;
     }
 }

@@ -31,7 +31,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     // private Shot shot;
     private List<Zombie> zombieList;
     private List<Shot> shotList;
-    private List<Peashooter> peaList;
+    // private List<Peashooter> peaList;
+    private List<Plant> plantList;
     // private int count;
 
     public Gameplay() {
@@ -39,17 +40,19 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         timer = new Timer(delay, this);
-        backImage = Toolkit.getDefaultToolkit().createImage("background2.png");
+        backImage = Toolkit.getDefaultToolkit().createImage("background.jpg");
         mouse = new Point();
         // zombie = new Zombie();
         // shot = new Shot();
         zombieList = new ArrayList<Zombie>();
         shotList = new ArrayList<Shot>();
-        peaList = new ArrayList<Peashooter>();
-        zombieList.add(new Zombie());
-        shotList.add(new Shot(617,450));
-        shotList.add(new Shot(800,450));
-        peaList.add(new Peashooter(600,325));
+        plantList = new ArrayList<Plant>();
+        // peaList = new ArrayList<Peashooter>();
+        zombieList.add(new RegularZombie());
+        shotList.add(new Shot(130,400));
+        shotList.add(new Shot(100,400));
+        plantList.add(new Peashooter(200,300));
+        // peaList.add(new Peashooter(200,300));
         
         addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseMoved(MouseEvent e) {
@@ -82,14 +85,23 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             }
         }
 
-        // peashooter
-        if (peaList.size() > 0) {
-            for (int i = 0; i < peaList.size(); i++) {
-                if (!peaList.get(i).isDead()) {
-                    peaList.get(i).draw((Graphics2D) g);
+        // plant
+        if (plantList.size() > 0) {
+            for (int i = 0; i < plantList.size(); i++) {
+                if (!plantList.get(i).isDead()) {
+                    plantList.get(i).draw((Graphics2D) g);
                 }
             }
         }
+
+        // peashooter
+        // if (peaList.size() > 0) {
+        //     for (int i = 0; i < peaList.size(); i++) {
+        //         if (!peaList.get(i).isDead()) {
+        //             peaList.get(i).draw((Graphics2D) g);
+        //         }
+        //     }
+        // }
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawString("mouse berada pada (" + mouse.x + "," + mouse.y + ")", 10, 10);
@@ -140,10 +152,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                     // System.out.println("zombie" + i);
                     // System.out.println("shot " + j);
                     if (new Rectangle(zombieList.get(i).zombieGetX(), zombieList.get(i).zombieGetY(),95,45).intersects(new Rectangle(shotList.get(j).shotGetX(), shotList.get(j).shotGetY(),30,30))) {
-                        zombieList.get(i).zombieDamage(shotList.get(j).shotDamage());
+                        zombieList.get(i).takeDamage(shotList.get(j).shotDamage());
                         shotList.get(j).shotDead();
                         shotList.remove(j);
-                        if (zombieList.get(i).zombiehp() <= 0) {
+                        if (zombieList.get(i).getHp() <= 0) {
                             zombieList.get(i).zombieDead();
                             zombieList.remove(i);
                             break;
@@ -154,16 +166,28 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         }
 
         // generate shot
-        if (peaList.size() > 0) {
-            for (int i = 0; i < peaList.size(); i++) {
-                if (!peaList.get(i).isDead()) {
-                    peaList.get(i).counterPlus();
-                    if (peaList.get(i).getCounter() % 100 == 0) {
-                        shotList.add(new Shot(peaList.get(i).peaGetX()+50, peaList.get(i).peaGetY()-5));
+        if (plantList.size() > 0) {
+            for (int i = 0; i < plantList.size(); i++) {
+                if (!plantList.get(i).isDead()) {
+                    plantList.get(i).counterPlus();
+                    if (plantList.get(i).getCounter() % 25 == 0) {
+                        shotList.add(new Shot(plantList.get(i).plantGetX()+50, plantList.get(i).plantGetY()-5));
                     }
                 }
             }
         }
+
+        // // generate shot
+        // if (peaList.size() > 0) {
+        //     for (int i = 0; i < peaList.size(); i++) {
+        //         if (!peaList.get(i).isDead()) {
+        //             peaList.get(i).counterPlus();
+        //             if (peaList.get(i).getCounter() % 25 == 0) {
+        //                 shotList.add(new Shot(peaList.get(i).peaGetX()+50, peaList.get(i).peaGetY()-5));
+        //             }
+        //         }
+        //     }
+        // }
 
         // generate shot
         // count++;

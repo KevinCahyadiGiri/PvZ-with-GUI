@@ -12,5 +12,6 @@ public class Main extends Canvas {
         obj.setVisible(true);
         obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         obj.add(gameplay);
+        // obj.add((new Thread(new Zombieinject(gameplay))).start());
     }
 }

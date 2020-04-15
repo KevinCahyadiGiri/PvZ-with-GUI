@@ -29,8 +29,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     // private Zombie zombie;
     private Point mouse;
     // private Shot shot;
-    private List<Zombie> zombieList;
-    private List<Shot> shotList;
+    List<Zombie> zombieList;
+    List<Shot> shotList;
     // private List<Peashooter> peaList;
     private List<Plant> plantList;
     // private int count;
@@ -73,14 +73,15 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         // background
         g.drawImage(backImage, 0, 0, null);
 
+
         // zombie
-        if (zombieList.size() > 0) {
-            for (int i = 0; i < zombieList.size(); i++) {
-                if (!zombieList.get(i).isDead()) {
-                    zombieList.get(i).draw((Graphics2D) g);
-                }
-            }
-        }
+        // if (zombieList.size() > 0) {
+        //     for (int i = 0; i < zombieList.size(); i++) {
+        //         if (!zombieList.get(i).isDead()) {
+        //             zombieList.get(i).draw((Graphics2D) g);
+        //         }
+        //     }
+        // }
         
         // shot
         if (shotList.size() > 0) {
@@ -124,13 +125,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent e) {
         timer.start();
 
-        if (zombieList.size() > 0) {
-            for (int i = 0; i < zombieList.size() ; i++) {
-                if (!zombieList.get(i).isDead()) {
-                    zombieList.get(i).zombieWalk();
-                }
-            }
-        }
+        // if (zombieList.size() > 0) {
+        //     for (int i = 0; i < zombieList.size() ; i++) {
+        //         if (!zombieList.get(i).isDead()) {
+        //             zombieList.get(i).zombieWalk();
+        //         }
+        //     }
+        // }
 
         if (shotList.size() > 0) {
             for (int i = 0; i < shotList.size() ; i++) {

@@ -23,6 +23,7 @@ import java.awt.Rectangle;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 
@@ -39,10 +40,14 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
     // private Shot shot;
     List<Zombie> zombieList;
     List<Shot> shotList;
+    List<Sun> sunList;
     // private List<Peashooter> peaList;
     private List<Plant> plantList;
     // private int count;
     private ListMap<String, Shot> plantToShot;
+    private int sunCounter;
+    Random rand;
+    private int sunfPoint;
 
     public Gameplay() {
         addKeyListener(this);
@@ -59,6 +64,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         zombieList = new ArrayList<Zombie>();
         shotList = new ArrayList<Shot>();
         plantList = new ArrayList<Plant>();
+        sunList = new ArrayList<Sun>();
         // peaList = new ArrayList<Peashooter>();
         zombieList.add(new RegularZombie(900,260));
         zombieList.add(new Zomboss(900,360));
@@ -70,6 +76,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         plantToShot = new ListMap<String, Shot>();
         plantToShot.add("Peashooter", new PeaShot());
         plantToShot.add("Mushroom", new MushroomShot());
+        sunCounter = 30;
+        rand = new Random();
+        sunfPoint = 0;
         
         addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseMoved(MouseEvent e) {
@@ -112,6 +121,15 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
             }
         }
 
+        // sun
+        if (sunList.size() > 0) {
+            for (int i = 0; i < sunList.size(); i++) {
+                if (!sunList.get(i).isTaken()) {
+                    sunList.get(i).draw((Graphics2D) g);
+                }
+            }
+        }
+
         // peashooter
         // if (peaList.size() > 0) {
         //     for (int i = 0; i < peaList.size(); i++) {
@@ -122,7 +140,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         // }
 
         Graphics2D g2d = (Graphics2D) g;
-        g2d.drawString("mouse berada pada (" + mouse.x + "," + mouse.y + ")", 10, 10);
+        g2d.drawString("mouse berada pada (" + mouse.x + "," + mouse.y + ")", 800, 10);
+        g2d.drawString(String.valueOf(sunfPoint), 45, 110);
 
         g.dispose();
     }
@@ -151,7 +170,18 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
             System.out.println("PLANT1");
         }else if (mouse.x>200 && mouse.x<264 && mouse.y>16 && mouse.y<110){  //memilih plant2
             System.out.println("PLANT2");
-        }
+        } else { // dia ngeklik area Field, nanti diganti aja kalo elsenya bikin repot
+            if (sunList.size() > 0) {
+                for (int i = sunList.size()-1; i >= 0; i--) {
+                    if (mouse.x>=sunList.get(i).getSunX() && mouse.x<=sunList.get(i).getSunX()+90 && mouse.y>=sunList.get(i).getSunY() && mouse.y<=sunList.get(i).getSunY()+90) {
+                        sunList.get(i).sunHasTaken();
+                        sunList.remove(sunList.get(i));
+                        sunfPoint += 25;
+                        break;
+                    }
+                }
+            }
+        }         
     }
 
     @Override 
@@ -166,10 +196,25 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         //     }
         // }
 
+        // memajukan tembakan
         if (shotList.size() > 0) {
             for (int i = 0; i < shotList.size() ; i++) {
                 if (!shotList.get(i).isDead()) {
                     shotList.get(i).shotGo();
+                }
+            }
+        }
+
+        // menggerakkan dan menghilangkan sun
+        if (sunList.size() > 0) {
+            boolean adaTaken = false;
+            for (int i = 0; i < sunList.size(); i++) {
+                sunList.get(i).goDrown();
+                if (!sunList.get(i).isTaken() && !sunList.get(i).isDrown()) {
+                    sunList.get(i).goDown();
+                } else if (sunList.get(i).timeToFade()) {
+                    sunList.remove(i);
+                    // i--;
                 }
             }
         }
@@ -233,6 +278,16 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
                 }
             }
         }
+
+        // generate Sun
+        sunCounter++;
+        if (sunCounter % 80 == 0) {
+            int posX = rand.nextInt(675) + 125;
+            int posY = rand.nextInt(310) + 190;
+            sunList.add(new Sun(posX,posY));
+        }
+
+        
 
         // // generate shot
         // if (peaList.size() > 0) {

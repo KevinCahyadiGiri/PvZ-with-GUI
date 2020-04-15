@@ -9,8 +9,14 @@ import java.awt.Toolkit;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
 
 import javax.swing.Timer;
+import javax.swing.event.MouseInputListener;
+
+//import sun.awt.AWTAccessor.MouseEventAccessor;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -20,12 +26,14 @@ import java.util.ArrayList;
 
 
 
-public class Gameplay extends JPanel implements KeyListener, ActionListener {
+public class Gameplay extends JPanel implements KeyListener, ActionListener, MouseInputListener {
     private boolean play = false;
     private Timer timer;
     private Timer timerShot;
     private int delay = 64;
     private Image backImage;
+    private Image cardplant1;
+    private Image cardplant2;
     // private Zombie zombie;
     private Point mouse;
     // private Shot shot;
@@ -38,10 +46,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     public Gameplay() {
         addKeyListener(this);
+        addMouseListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         timer = new Timer(delay, this);
         backImage = Toolkit.getDefaultToolkit().createImage("background.jpg");
+        cardplant1 = Toolkit.getDefaultToolkit().createImage("peashooterCard.png");
+        cardplant2 = Toolkit.getDefaultToolkit().createImage("fungusCard.png");
         mouse = new Point();
         // zombie = new Zombie();
         // shot = new Shot();
@@ -72,8 +83,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     public void paint(Graphics g) {
         // background
         g.drawImage(backImage, 0, 0, null);
-
-
+        g.drawImage(cardplant1, 120, 16, null);
+        g.drawImage(cardplant2, 200, 16, null);
         // zombie
         // if (zombieList.size() > 0) {
         //     for (int i = 0; i < zombieList.size(); i++) {
@@ -112,14 +123,36 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawString("mouse berada pada (" + mouse.x + "," + mouse.y + ")", 10, 10);
-    }
 
+        g.dispose();
+    }
     @Override
     public void keyTyped(KeyEvent e) {}
     @Override
     public void keyReleased(KeyEvent e) {}
     @Override
     public void keyPressed(KeyEvent e) {}
+    @Override
+    public void mouseEntered(MouseEvent e){}
+    @Override
+    public void mouseExited(MouseEvent e){}
+    @Override
+    public void mousePressed(MouseEvent e){} 
+    @Override
+    public void mouseReleased(MouseEvent e){} 
+    @Override
+    public void mouseDragged(MouseEvent e){} 
+    @Override
+    public void mouseMoved(MouseEvent e){}
+
+    
+    public void mouseClicked(MouseEvent e){
+        if(mouse.x>120 && mouse.x<184 && mouse.y>16 && mouse.y<110){    //menekan plant1
+            System.out.println("PLANT1");
+        }else if (mouse.x>200 && mouse.x<264 && mouse.y>16 && mouse.y<110){  //memilih plant2
+            System.out.println("PLANT2");
+        }
+    }
 
     @Override 
     public void actionPerformed(ActionEvent e) {
@@ -221,4 +254,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         repaint();
     }
+
+    
 }

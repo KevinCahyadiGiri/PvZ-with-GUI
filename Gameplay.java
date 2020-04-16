@@ -273,14 +273,16 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
             //buat Plant P di posisi x dan y
             if(plant == 1){
                 plantList.add(new Peashooter(translatePlantX(x),translatePlantY(y)));
+                sunfPoint-=100;
                 //bikin square jadi terisi
                 // int tempx = translatePlantX(x);
                 // int tempy = translatePlantY(y);
                 // System.out.println(tempx +" , "+ tempy);
                 map.putPlant(x, y);
                 clickedOnce=false;
-            }else{
+            }else{ //plant==2
                 plantList.add(new Mushroom(translatePlantX(x),translatePlantY(y)));
+                sunfPoint-=50;
                 //bikin square jadi terisi
                 // int tempx = translatePlantX(x);
                 // int tempy = translatePlantY(y);
@@ -316,13 +318,17 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
     public void mouseClicked(MouseEvent e){
         if(!clickedOnce){
             if(mouse.x>120 && mouse.x<184 && mouse.y>16 && mouse.y<110){    //menekan plant1
-                System.out.println("PLANT1");
-                clickedOnce=true;
-                tempClick = 1; 
+                //System.out.println("PLANT1");
+                if (sunfPoint>=100){
+                    clickedOnce=true;
+                    tempClick = 1; 
+                }
             }else if (mouse.x>200 && mouse.x<264 && mouse.y>16 && mouse.y<110){  //memilih plant2
-                System.out.println("PLANT2");
-                clickedOnce=true;
-                tempClick = 2;
+                //System.out.println("PLANT2");
+                if (sunfPoint>=50){
+                    clickedOnce=true;
+                    tempClick = 2;
+                }
             } else { // dia ngeklik area Field, nanti diganti aja kalo elsenya bikin repot
                 if (sunList.size() > 0) {
                     for (int i = sunList.size()-1; i >= 0; i--) {

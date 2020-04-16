@@ -6,7 +6,7 @@ public class Peashooter extends Plant {
     private int shotDamage; 
 
     public Peashooter(int x, int y) {
-        plantImage = Toolkit.getDefaultToolkit().createImage("Peashooter.png");
+        plantImage = Toolkit.getDefaultToolkit().createImage("pea_shooter.gif");
         posX = x;
         posY = y;
         dead = false;

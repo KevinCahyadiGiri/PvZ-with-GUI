@@ -13,11 +13,10 @@ public class Main extends JFrame{
     //     setLayout(new FlowLayout());
     //     add(plant1);
     // }
-
     public static void main(String[] args) {
         JFrame obj = new JFrame();
         Gameplay gameplay = new Gameplay();
-
+        Sound.bgmusic.loop();
         //Try 1
         // JButton b=new JButton(new ImageIcon("peashooterCard.png"));
         // b.setBounds(0,0,80,120);

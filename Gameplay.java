@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
+//import org.graalvm.compiler.hotspot.replacements.NewObjectSnippets.Templates;
 //import sun.awt.AWTAccessor.MouseEventAccessor;
 
 import java.awt.Graphics;
@@ -35,6 +36,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
     private Image backImage;
     private Image cardplant1;
     private Image cardplant2;
+    private Image cardplant1bw;
+    private Image cardplant2bw;
     // private Zombie zombie;
     private Point mouse;
     // private Shot shot;
@@ -48,6 +51,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
     private int sunCounter;
     Random rand;
     private int sunfPoint;
+    public int tempClick; //1.peashooter 2. mushroom
+    public boolean clickedOnce=false;
+    
+    private Graphics g;
+    private MapGenerator map;
 
     public Gameplay() {
         addKeyListener(this);
@@ -58,6 +66,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         backImage = Toolkit.getDefaultToolkit().createImage("background.jpg");
         cardplant1 = Toolkit.getDefaultToolkit().createImage("peashooterCard.png");
         cardplant2 = Toolkit.getDefaultToolkit().createImage("fungusCard.png");
+        cardplant1bw = Toolkit.getDefaultToolkit().createImage("peashooterCardbw.png");
+        cardplant2bw = Toolkit.getDefaultToolkit().createImage("fungusCardbw.png");
         mouse = new Point();
         // zombie = new Zombie();
         // shot = new Shot();
@@ -65,13 +75,15 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         shotList = new ArrayList<Shot>();
         plantList = new ArrayList<Plant>();
         sunList = new ArrayList<Sun>();
+        map= new MapGenerator(5,9);
+
         // peaList = new ArrayList<Peashooter>();
         zombieList.add(new RegularZombie(900,260));
         zombieList.add(new Zomboss(900,360));
         shotList.add(new PeaShot(130,400));
         shotList.add(new PeaShot(100,400));
-        plantList.add(new Mushroom(200,300));
-        plantList.add(new Peashooter(200,500));
+        plantList.add(new Mushroom(190,280));
+        plantList.add(new Peashooter(190,510));
         // peaList.add(new Peashooter(200,300));
         plantToShot = new ListMap<String, Shot>();
         plantToShot.add("Peashooter", new PeaShot());
@@ -89,11 +101,37 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         timer.start();
     }
 
+    // public void plantCardFree(int PlantType){
+    //     if (PlantType==1){
+    //         g.drawImage(cardplant1, 120, 16, null);
+    //     }else if (PlantType==2){
+    //         g.drawImage(cardplant2, 200, 16, null);
+    //     }
+    // }
+
+    // public void plantCardLock(int PlantType){
+    //     if (PlantType==1){
+    //         g.drawImage(cardplant1bw, 120, 16, null);
+    //     }else if (PlantType==2){
+    //         g.drawImage(cardplant2bw, 200, 16, null);
+    //     }
+    // }
+
     public void paint(Graphics g) {
         // background
         g.drawImage(backImage, 0, 0, null);
-        g.drawImage(cardplant1, 120, 16, null);
-        g.drawImage(cardplant2, 200, 16, null);
+        if (clickedOnce){
+            if (tempClick==1){
+                g.drawImage(cardplant1bw, 120, 16, null);
+                g.drawImage(cardplant2, 200, 16, null);
+            }else if (tempClick==2){
+                g.drawImage(cardplant1, 120, 16, null);
+                g.drawImage(cardplant2bw, 200, 16, null);
+            }
+        } else {
+            g.drawImage(cardplant1, 120, 16, null);
+            g.drawImage(cardplant2, 200, 16, null);
+        }
         // zombie
         // if (zombieList.size() > 0) {
         //     for (int i = 0; i < zombieList.size(); i++) {
@@ -145,6 +183,67 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
 
         g.dispose();
     }
+
+    public int translatex(int x){       //translasi posisi x mouse untuk menentukan user klik di kolom berapa
+        if (x>100 && x<190){            //hanya dipakai untuk menanam tanaman
+            return 0;
+        }else if (x>190 && x<270){
+            return 1;
+        }else if (x>370 && x<470){
+            return 2;
+        }else if (x>470 && x<570){
+            return 3;
+        }else if (x>570 && x<660){
+            return 4;
+        }else if (x>660 && x<750){
+            return 5;
+        }else if (x>750 && x<850){
+            return 6;
+        }else{
+            return x;
+        }
+    }
+
+    public int translatey(int y){       //translasi posisi y mouse untuk menentukan user klik di baris berapa
+        if (y>160 && y<270){            //hanya dipakai untuk menanam tanaman
+            return 0;
+        }else if (y>270 && y<380){
+            return 1;
+        }else if (y>380 && y<500){
+            return 2;
+        }else if (y>500 && y<610){
+            return 3;
+        }else if (y>610 && y<720){
+            return 4;
+        }else{
+            return y;
+        }
+    }
+
+    public void put(int plant, int mousex, int mousey){
+        //translasi x dan y dari mouse position jadi square
+        int x = translatex(mousex);
+        int y = translatey(mousey);
+        
+        if (map.map[x][y]==0){
+            //buat Plant P di posisi x dan y
+            if(plant == 1){
+                plantList.add(new Peashooter(x,y));
+                //bikin square jadi terisi
+                map.putPlant(x, y);
+            }else{
+                plantList.add(new Mushroom(x,y));
+                //bikin square jadi terisi
+                map.putPlant(x, y);
+            }
+        }else {
+            System.out.println("Di sana udah ada tumbuhan, cari tempat lain");
+        }
+        
+        
+
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {}
     @Override
@@ -166,22 +265,39 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
 
     
     public void mouseClicked(MouseEvent e){
-        if(mouse.x>120 && mouse.x<184 && mouse.y>16 && mouse.y<110){    //menekan plant1
-            System.out.println("PLANT1");
-        }else if (mouse.x>200 && mouse.x<264 && mouse.y>16 && mouse.y<110){  //memilih plant2
-            System.out.println("PLANT2");
-        } else { // dia ngeklik area Field, nanti diganti aja kalo elsenya bikin repot
-            if (sunList.size() > 0) {
-                for (int i = sunList.size()-1; i >= 0; i--) {
-                    if (mouse.x>=sunList.get(i).getSunX() && mouse.x<=sunList.get(i).getSunX()+90 && mouse.y>=sunList.get(i).getSunY() && mouse.y<=sunList.get(i).getSunY()+90) {
-                        sunList.get(i).sunHasTaken();
-                        sunList.remove(sunList.get(i));
-                        sunfPoint += 25;
-                        break;
+        if(!clickedOnce){
+            if(mouse.x>120 && mouse.x<184 && mouse.y>16 && mouse.y<110){    //menekan plant1
+                System.out.println("PLANT1");
+                clickedOnce=true;
+                tempClick = 1; 
+            }else if (mouse.x>200 && mouse.x<264 && mouse.y>16 && mouse.y<110){  //memilih plant2
+                System.out.println("PLANT2");
+                clickedOnce=true;
+                tempClick = 2;
+            } else { // dia ngeklik area Field, nanti diganti aja kalo elsenya bikin repot
+                if (sunList.size() > 0) {
+                    for (int i = sunList.size()-1; i >= 0; i--) {
+                        if (mouse.x>=sunList.get(i).getSunX() && mouse.x<=sunList.get(i).getSunX()+90 && mouse.y>=sunList.get(i).getSunY() && mouse.y<=sunList.get(i).getSunY()+90) {
+                            sunList.get(i).sunHasTaken();
+                            sunList.remove(sunList.get(i));
+                            sunfPoint += 25;
+                            break;
+                        }
                     }
                 }
-            }
-        }         
+            } 
+        } else { //clickedOnce = true (user sudah memilih tanaman, sedang memilih mau ditanam di mana)
+            if(mouse.x>100 && mouse.x<850 && mouse.y>160 && mouse.y<720){  //kliknya di dalam field
+                put(tempClick,mouse.x,mouse.y);
+                clickedOnce=false;
+            }else{      //kliknya di luar field == cancel
+                if (tempClick==1){
+                    clickedOnce = false;
+                }else if (tempClick==2){
+                    clickedOnce= false;
+                }
+            } 
+        }
     }
 
     @Override 

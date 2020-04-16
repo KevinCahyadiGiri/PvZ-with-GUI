@@ -51,8 +51,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
     private int sunCounter;
     Random rand;
     private int sunfPoint;
-    public int tempClick; //1.peashooter 2. mushroom
-    public boolean clickedOnce=false;
+    public static int tempClick; //1.peashooter 2. mushroom
+    public static boolean clickedOnce=false;
     
     private Graphics g;
     private MapGenerator map;
@@ -75,7 +75,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         shotList = new ArrayList<Shot>();
         plantList = new ArrayList<Plant>();
         sunList = new ArrayList<Sun>();
-        map= new MapGenerator(5,9);
+        map= new MapGenerator(9,5);
 
         // peaList = new ArrayList<Peashooter>();
         zombieList.add(new RegularZombie(900,260));
@@ -179,7 +179,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawString("mouse berada pada (" + mouse.x + "," + mouse.y + ")", 800, 10);
-        g2d.drawString(String.valueOf(sunfPoint), 45, 110);
+        g2d.drawString(String.valueOf(sunfPoint), 50, 110);
 
         g.dispose();
     }
@@ -189,16 +189,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
             return 0;
         }else if (x>190 && x<270){
             return 1;
-        }else if (x>370 && x<470){
+        }else if (x>270 && x<370){
             return 2;
-        }else if (x>470 && x<570){
+        }else if (x>370 && x<470){
             return 3;
-        }else if (x>570 && x<660){
+        }else if (x>470 && x<570){
             return 4;
-        }else if (x>660 && x<750){
+        }else if (x>570 && x<660){
             return 5;
-        }else if (x>750 && x<850){
+        }else if (x>660 && x<750){
             return 6;
+        }else if (x>750 && x<850){
+            return 7;
+        }else if (x>850 && x<940){
+            return 8;
         }else{
             return x;
         }
@@ -220,6 +224,46 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         }
     }
 
+    public int translatePlantX(int x){  //translasi posisi baris dan kolom menjadi lokasi penanaman
+        if (x==0){
+            return 95;
+        }else if (x==1){
+            return 190;
+        }else if (x==2){
+            return 280;
+        }else if (x==3){
+            return 380;
+        }else if (x==4){
+            return 470;
+        }else if (x==5){
+            return 560;
+        }else if (x==6){
+            return 660;
+        }else if (x==7){
+            return 750;
+        }else if (x==8){
+            return 850;
+        }else{
+            return -1;
+        }
+    }
+
+    public int translatePlantY(int y){
+        if (y==0){
+            return 170;
+        }else if (y==1){
+            return 280; 
+        }else if (y==2){
+            return 390;
+        }else if (y==3){
+            return 510;
+        }else if (y==4){
+            return 630;
+        }else{
+            return -1;
+        }
+    }
+
     public void put(int plant, int mousex, int mousey){
         //translasi x dan y dari mouse position jadi square
         int x = translatex(mousex);
@@ -228,20 +272,25 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         if (map.map[x][y]==0){
             //buat Plant P di posisi x dan y
             if(plant == 1){
-                plantList.add(new Peashooter(x,y));
+                plantList.add(new Peashooter(translatePlantX(x),translatePlantY(y)));
                 //bikin square jadi terisi
+                // int tempx = translatePlantX(x);
+                // int tempy = translatePlantY(y);
+                // System.out.println(tempx +" , "+ tempy);
                 map.putPlant(x, y);
+                clickedOnce=false;
             }else{
-                plantList.add(new Mushroom(x,y));
+                plantList.add(new Mushroom(translatePlantX(x),translatePlantY(y)));
                 //bikin square jadi terisi
+                // int tempx = translatePlantX(x);
+                // int tempy = translatePlantY(y);
+                // System.out.println(tempx +" , "+ tempy);
                 map.putPlant(x, y);
+                clickedOnce=false;
             }
         }else {
             System.out.println("Di sana udah ada tumbuhan, cari tempat lain");
         }
-        
-        
-
     }
 
     @Override
@@ -287,9 +336,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
                 }
             } 
         } else { //clickedOnce = true (user sudah memilih tanaman, sedang memilih mau ditanam di mana)
-            if(mouse.x>100 && mouse.x<850 && mouse.y>160 && mouse.y<720){  //kliknya di dalam field
+            if(mouse.x>100 && mouse.x<940 && mouse.y>160 && mouse.y<720){  //kliknya di dalam field
                 put(tempClick,mouse.x,mouse.y);
-                clickedOnce=false;
             }else{      //kliknya di luar field == cancel
                 if (tempClick==1){
                     clickedOnce = false;

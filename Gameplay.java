@@ -79,8 +79,16 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         map= new MapGenerator(9,5);
 
         // peaList = new ArrayList<Peashooter>();
-        zombieList.add(new RegularZombie(900,260));
+        zombieList.add(new RegularZombie(900,140));
+        zombieList.add(new RegularZombie(900,250));
+        zombieList.add(new RegularZombie(900,360));
+        zombieList.add(new RegularZombie(900,490));
+        zombieList.add(new RegularZombie(900,600));
+        zombieList.add(new Zomboss(900,140));
+        zombieList.add(new Zomboss(900,250));
         zombieList.add(new Zomboss(900,360));
+        zombieList.add(new Zomboss(900,490));
+        zombieList.add(new Zomboss(900,600));
         shotList.add(new PeaShot(130,400));
         shotList.add(new PeaShot(100,400));
         plantList.add(new Mushroom(190,280));
@@ -123,20 +131,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         g.drawImage(backImage, 0, 0, null);
 
 
-
-        //Injector Index
-        // IndexInject inject = new IndexInject(1);
-        // Thread t = new Thread(inject);
-        // t.start();
-        // int take = inject.getValue();
-        //         if (!zombieList.get(take).isDead()) {
-        //             zombieList.get(take).draw((Graphics2D) g);
-        //             try {
-        //                 java.lang.Thread.sleep(100);
-        //             } catch (Exception e) {
-        //                 System.out.println("Zombie habis");
-        //             }
-        //         }   
+        // Injector Index
+        IndexInject inject = new IndexInject(1);
+        Thread t = new Thread(inject);
+        t.start();
+        int take = inject.getValue();
+        //Di bawah ini drawnya masih belom bener, bisa tolong benerin?
+                if (!zombieList.get(take).isDead()) {
+                    zombieList.get(take).draw((Graphics2D) g);
+                    try {
+                        java.lang.Thread.sleep(100);
+                    } catch (Exception e) {
+                        System.out.println("Zombie habis");
+                    }
+                }   
 
 
         // Runs outside of the Swing UI thread

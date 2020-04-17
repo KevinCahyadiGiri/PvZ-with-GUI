@@ -2,7 +2,7 @@
 
 
 public class IndexInject implements Runnable {
-    private int value;
+    private volatile int value;
     private boolean stop = false;
 
     public IndexInject(int a){
@@ -12,17 +12,18 @@ public class IndexInject implements Runnable {
     @Override
     public void run() {
         do {
-            this.value = (int) Math.random() * 1;
+            this.value = (int) Math.random() * 10;
             try {
                 Thread.sleep(1000);
                 System.out.println(value);
             } catch (Exception e) {
                 System.out.println("Zombie habis");
             }
+            this.value = (int) Math.random() * 10;
         } while (!stop);
     }
 
     public int getValue() {
-        return value;
+        return this.value;
     }
 }

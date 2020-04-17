@@ -45,9 +45,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
     List<Zombie> zombieList;
     List<Shot> shotList;
     List<Sun> sunList;
-    // private List<Peashooter> peaList;
+    List<Zombie> zombieSelection;
+    int counterGenerateZombie;
+    int modGenerateZombie;
     private List<Plant> plantList;
-    // private int count;
     private ListMap<String, Shot> plantToShot;
     private int sunCounter;
     Random rand;
@@ -57,6 +58,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
     
     private Graphics g;
     private MapGenerator map;
+    IndexInject inject;
+    Thread t;
 
     public Gameplay() {
         addKeyListener(this);
@@ -70,36 +73,33 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         cardplant1bw = Toolkit.getDefaultToolkit().createImage("peashooterCardbw.png");
         cardplant2bw = Toolkit.getDefaultToolkit().createImage("fungusCardbw.png");
         mouse = new Point();
-        // zombie = new Zombie();
-        // shot = new Shot();
         zombieList = new ArrayList<Zombie>();
         shotList = new ArrayList<Shot>();
         plantList = new ArrayList<Plant>();
         sunList = new ArrayList<Sun>();
+        zombieSelection = new ArrayList<Zombie>();
+        counterGenerateZombie = 0;
+        modGenerateZombie = 60;
         map= new MapGenerator(9,5);
 
         // peaList = new ArrayList<Peashooter>();
-        zombieList.add(new RegularZombie(900,140));
-        zombieList.add(new RegularZombie(900,250));
-        zombieList.add(new RegularZombie(900,360));
-        zombieList.add(new RegularZombie(900,490));
-        zombieList.add(new RegularZombie(900,600));
-        zombieList.add(new Zomboss(900,140));
-        zombieList.add(new Zomboss(900,250));
-        zombieList.add(new Zomboss(900,360));
-        zombieList.add(new Zomboss(900,490));
-        zombieList.add(new Zomboss(900,600));
-        shotList.add(new PeaShot(130,400));
-        shotList.add(new PeaShot(100,400));
-        plantList.add(new Mushroom(190,280));
-        plantList.add(new Peashooter(190,510));
-        // peaList.add(new Peashooter(200,300));
+        zombieSelection.add(new RegularZombie(900,140));
+        zombieSelection.add(new RegularZombie(900,250));
+        zombieSelection.add(new RegularZombie(900,360));
+        zombieSelection.add(new RegularZombie(900,490));
+        zombieSelection.add(new RegularZombie(900,600));
+        zombieSelection.add(new Zomboss(900,140));
+        zombieSelection.add(new Zomboss(900,250));
+        zombieSelection.add(new Zomboss(900,360));
+        zombieSelection.add(new Zomboss(900,490));
+        zombieSelection.add(new Zomboss(900,600));
         plantToShot = new ListMap<String, Shot>();
         plantToShot.add("Peashooter", new PeaShot());
         plantToShot.add("Mushroom", new MushroomShot());
         sunCounter = 30;
         rand = new Random();
-        sunfPoint = 0;
+        sunfPoint = 200;
+        
         
         addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseMoved(MouseEvent e) {
@@ -108,6 +108,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         });
         // count = 0;
         timer.start();
+        inject = new IndexInject(10);
+        t = new Thread(inject);
+        t.start();
     }
 
     // public void plantCardFree(int PlantType){
@@ -130,51 +133,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         // background
         g.drawImage(backImage, 0, 0, null);
 
-
-        // Injector Index
-        IndexInject inject = new IndexInject(1);
-        Thread t = new Thread(inject);
-        t.start();
-        int take = inject.getValue();
-        //Di bawah ini drawnya masih belom bener, bisa tolong benerin?
-                if (!zombieList.get(take).isDead()) {
-                    zombieList.get(take).draw((Graphics2D) g);
-                    try {
-                        java.lang.Thread.sleep(100);
-                    } catch (Exception e) {
-                        System.out.println("Zombie habis");
-                    }
-                }   
-
-
-        // Runs outside of the Swing UI thread
-        // new Thread(new Runnable() {
-        //     public void run() {
-        //         if (zombieList.size() > 0) {
-      
-        //         // Runs inside of the Swing UI thread
-        //         SwingUtilities.invokeLater(new Runnable() {
-        //           public void run() {
-        //             for (int i = 0; i < zombieList.size() ; i++) {
-        //                 if (!zombieList.get(i).isDead()) {
-        //                     zombieList.get(i).draw((Graphics2D) g);
-        //                     }
-        //                         try {
-        //                             java.lang.Thread.sleep(1000);
-        //                             System.out.println("berhasil1");
-        //                           }
-        //                           catch(Exception e) { 
-        //                               System.out.println("gagal1");
-        //                           }
-        //                     }
-        //           }
-        //         });
-                
-        //       }
-        //     }
-        //   }).start();
-       
-
+        // kartu
         if (clickedOnce){
             if (tempClick==1){
                 g.drawImage(cardplant1bw, 120, 16, null);
@@ -189,13 +148,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         }
 
         // zombie
-        // if (zombieList.size() > 0) {
-        //     for (int i = 0; i < zombieList.size(); i++) {
-        //         if (!zombieList.get(i).isDead()) {
-        //             zombieList.get(i).draw((Graphics2D) g);
-        //         }
-        //     }
-        // }
+        if (zombieList.size() > 0) {
+            for (int i = 0; i < zombieList.size(); i++) {
+                if (!zombieList.get(i).isDead()) {
+                    zombieList.get(i).draw((Graphics2D) g);
+                }
+            }
+        }
         
         // shot
         if (shotList.size() > 0) {
@@ -223,15 +182,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
                 }
             }
         }
-
-        // peashooter
-        // if (peaList.size() > 0) {
-        //     for (int i = 0; i < peaList.size(); i++) {
-        //         if (!peaList.get(i).isDead()) {
-        //             peaList.get(i).draw((Graphics2D) g);
-        //         }
-        //     }
-        // }
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawString("mouse berada pada (" + mouse.x + "," + mouse.y + ")", 800, 10);
@@ -414,41 +364,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
     public void actionPerformed(ActionEvent e) {
         timer.start();
 
-
-        // Runs outside of the Swing UI thread
-    //     new Thread(new Runnable() {
-    //     public void run() {
-    //         if (zombieList.size() > 0) {
-  
-    //         // Runs inside of the Swing UI thread
-    //         SwingUtilities.invokeLater(new Runnable() {
-    //           public void run() {
-    //             for (int i = 0; i < zombieList.size() ; i++) {
-    //                         if (!zombieList.get(i).isDead()) {
-    //                             zombieList.get(i).zombieWalk();
-    //                         }
-    //                         try {
-    //                             java.lang.Thread.sleep(100);
-    //                             System.out.println("berhasil");
-    //                           }
-    //                           catch(Exception e) {
-    //                               System.out.println("gagal");
-    //                            }
-    //                     }
-    //           }
-    //         });
-            
-    //       }
-    //     }
-    //   }).start();
-
-
-
-
-
-
-
-
         if (zombieList.size() > 0) {
             for (int i = 0; i < zombieList.size() ; i++) {
                 if (!zombieList.get(i).isDead()) {
@@ -480,17 +395,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
             }
         }
 
-        // if (!zombie.isDead()) {
-        //     zombie.zombieWalk();
-        // }
-        // if (!shot.isDead()) {
-        //     shot.shotGo();
-        // }
-        // if(new Rectangle(zombie.zombieGetX(), zombie.zombieGetY(),95,45).intersects(new Rectangle(shot.shotGetX(), shot.shotGetY(), 30,30))) {
-        //     zombie.zombieDead();
-        //     shot.shotDead();
-        // }
-
         // jika zombie terkena tembakan
         if (zombieList.size() > 0 && shotList.size() > 0) {
             for (int i = 0; i < zombieList.size(); i++) {
@@ -516,19 +420,14 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
             for (int i = 0; i < plantList.size(); i++) {
                 if (!plantList.get(i).isDead()) {
                     plantList.get(i).counterPlus();
-                    // System.out.println(plantList.get(i).getClass().getName() + " " + plantList.get(i).getCounter());
                     if (plantList.get(i).getCounter() % 25 == 0) {
-                        // shotList.add(new PeaShot(plantList.get(i).plantGetX()+50, plantList.get(i).plantGetY()-5));
-                        // System.out.println(plantList.get(i).getClass().getName());
                         try {
                             String plantName = plantList.get(i).getClass().getName();
                             Shot newShot = (Shot) plantToShot.get(plantName).clone();
                             newShot.setPos(plantList.get(i).plantGetX()+50, plantList.get(i).plantGetY()-5);
                             shotList.add(newShot);
-                            // System.out.println("tidak error");
                         }
                         catch (CloneNotSupportedException err) {
-                            // System.out.println("error");
                             String plantName = plantList.get(i).getClass().getName();
                             Shot newShot = plantToShot.get(plantName);
                             newShot.shotAlive();
@@ -548,25 +447,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
             sunList.add(new Sun(posX,posY));
         }
 
-        
-
-        // // generate shot
-        // if (peaList.size() > 0) {
-        //     for (int i = 0; i < peaList.size(); i++) {
-        //         if (!peaList.get(i).isDead()) {
-        //             peaList.get(i).counterPlus();
-        //             if (peaList.get(i).getCounter() % 25 == 0) {
-        //                 shotList.add(new Shot(peaList.get(i).peaGetX()+50, peaList.get(i).peaGetY()-5));
-        //             }
-        //         }
-        //     }
-        // }
-
-        // generate shot
-        // count++;
-        // if (count % 100 == 0) {
-        //     shotList.add(new Shot(617,450));
-        // }
+        // generate zombie
+        int take = inject.getValue();
+        take = take % zombieSelection.size();
+        try {
+            counterGenerateZombie++;
+            if (counterGenerateZombie % modGenerateZombie == 0) {
+                Zombie newZombie = (Zombie) zombieSelection.get(take).clone();
+                zombieList.add(newZombie);
+                System.out.println("take" + take);
+                java.lang.Thread.sleep(100);
+            }
+        } catch (Exception ex) {
+            System.out.println("Zombie habis");
+        }
 
         repaint();
     }

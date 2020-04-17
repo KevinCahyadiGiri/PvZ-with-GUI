@@ -1,6 +1,7 @@
 import javax.swing.JPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -35,6 +36,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
     private Timer timerShot;
     private int delay = 64;
     private Image backImage;
+    private Image backGameOverImage;
     private Image cardplant1;
     private Image cardplant2;
     private Image cardplant1bw;
@@ -61,6 +63,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
     IndexInject inject;
     Thread t;
 
+    private String gameStatus;
+
     public Gameplay() {
         addKeyListener(this);
         addMouseListener(this);
@@ -68,6 +72,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         setFocusTraversalKeysEnabled(false);
         timer = new Timer(delay, this);
         backImage = Toolkit.getDefaultToolkit().createImage("background.jpg");
+        backGameOverImage = Toolkit.getDefaultToolkit().createImage("rsz_gameoverback.jpg");
         cardplant1 = Toolkit.getDefaultToolkit().createImage("peashooterCard.png");
         cardplant2 = Toolkit.getDefaultToolkit().createImage("fungusCard.png");
         cardplant1bw = Toolkit.getDefaultToolkit().createImage("peashooterCardbw.png");
@@ -107,6 +112,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
             }
         });
         // count = 0;
+        gameStatus = "playing";
         timer.start();
         inject = new IndexInject(10);
         t = new Thread(inject);
@@ -184,6 +190,14 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         }
 
         Graphics2D g2d = (Graphics2D) g;
+        // game over
+        if (gameStatus.equals("gameOver")) {
+            // g2d.drawString("game over", 800, 20);
+            g.setColor(Color.BLACK);
+            g.fillRect(0,0,997,808);
+            g.drawImage(backGameOverImage, 0, 0, null);
+        }
+
         g2d.drawString("mouse berada pada (" + mouse.x + "," + mouse.y + ")", 800, 10);
         g2d.drawString(String.valueOf(sunfPoint), 50, 110);
 
@@ -481,6 +495,15 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
             }
         } catch (Exception ex) {
             System.out.println("Zombie habis");
+        }
+
+        // cek apakah zombie sudah sampe ujung
+        if (zombieList.size() > 0) {
+            for (int i = 0; i < zombieList.size(); i++) {
+                if (zombieList.get(i).zombieGetX() < 90) {
+                    gameStatus = "gameOver";
+                }
+            }
         }
 
         repaint();

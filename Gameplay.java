@@ -137,15 +137,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         t.start();
         int take = inject.getValue();
         //Di bawah ini drawnya masih belom bener, bisa tolong benerin?
+        //TODO
+        
+            
                 if (!zombieList.get(take).isDead()) {
                     zombieList.get(take).draw((Graphics2D) g);
+                    zombieList.get(take).zombieWalk();
                     try {
                         java.lang.Thread.sleep(100);
                     } catch (Exception e) {
                         System.out.println("Zombie habis");
                     }
                 }   
-
+            
+        
 
         // Runs outside of the Swing UI thread
         // new Thread(new Runnable() {
@@ -448,14 +453,14 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
 
 
 
-
-        if (zombieList.size() > 0) {
-            for (int i = 0; i < zombieList.size() ; i++) {
-                if (!zombieList.get(i).isDead()) {
-                    zombieList.get(i).zombieWalk();
-                }
-            }
-        }
+// REMOVED TEMPORARILY
+//        if (zombieList.size() > 0) {
+//            for (int i = 0; i < zombieList.size() ; i++) {
+//                if (!zombieList.get(i).isDead()) {
+//                    zombieList.get(i).zombieWalk();
+//                }
+//            }
+//        }
 
         // memajukan tembakan
         if (shotList.size() > 0) {

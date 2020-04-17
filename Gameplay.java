@@ -79,7 +79,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         sunList = new ArrayList<Sun>();
         zombieSelection = new ArrayList<Zombie>();
         counterGenerateZombie = 0;
-        modGenerateZombie = 60;
+        modGenerateZombie = 120;
         map= new MapGenerator(9,5);
 
         // peaList = new ArrayList<Peashooter>();
@@ -410,6 +410,26 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
                             zombieList.get(i).zombieDead();
                             zombieList.remove(i);
                             break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // zombie terkena tumbuhan
+        if (zombieList.size() > 0 && plantList.size() > 0) {
+            for (int i = 0; i < zombieList.size(); i++) {
+                for (int j = 0; j < plantList.size(); j++) {
+                    if (new Rectangle(zombieList.get(i).zombieGetX(), zombieList.get(i).zombieGetY(),95,45).intersects(new Rectangle(plantList.get(j).plantGetX(), plantList.get(j).plantGetY(),30,30))) {
+                        zombieList.get(i).zombieHold();
+                        zombieList.get(i).incAttCounter();
+                        if (zombieList.get(i).getAttCounter() % zombieList.get(i).getModAttCounter() == 0) {
+                            plantList.get(j).takeDamage(zombieList.get(i).giveDamage());
+                            if (plantList.get(j).getHp() <= 0) {
+                                plantList.get(j).plantDead();
+                                plantList.remove(j);
+                                break;
+                            }
                         }
                     }
                 }

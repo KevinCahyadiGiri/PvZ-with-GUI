@@ -10,6 +10,7 @@ public class RegularZombie extends Zombie {
         zombieY = y;
         dead = false;
         hp = 100;
+        damage = 50;
     }
 
 }

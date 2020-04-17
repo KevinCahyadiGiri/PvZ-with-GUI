@@ -10,6 +10,7 @@ public class Zomboss extends Zombie {
         zombieY = y;
         dead = false;
         hp = 200;
+        damage = 30;
     }
 
 }

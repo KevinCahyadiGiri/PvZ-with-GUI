@@ -25,7 +25,7 @@ public abstract class Zombie implements Creature, Cloneable {
     }
 
     public void zombieWalk() {
-        zombieX -= 5;
+        zombieX -= 3;
     }
 
     public void zombieHold() {

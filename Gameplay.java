@@ -364,6 +364,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
     public void actionPerformed(ActionEvent e) {
         timer.start();
 
+        // memajukan zombie
         if (zombieList.size() > 0) {
             for (int i = 0; i < zombieList.size() ; i++) {
                 if (!zombieList.get(i).isDead()) {

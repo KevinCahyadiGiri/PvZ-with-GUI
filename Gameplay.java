@@ -11,12 +11,16 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.Timer;
+
+// import sun.java2d.loops.GraphicsPrimitive;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import java.util.List;
 import java.util.ArrayList;
+import javax.swing.SwingUtilities;
 
 
 
@@ -74,6 +78,43 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.drawImage(backImage, 0, 0, null);
 
 
+        //Injector Index
+        IndexInject inject = new IndexInject(1);
+        Thread t = new Thread(inject);
+        t.start();
+        int take = inject.getValue();
+                if (!zombieList.get(take).isDead()) {
+                    zombieList.get(take).draw((Graphics2D) g);
+                }   
+
+
+        // Runs outside of the Swing UI thread
+        // new Thread(new Runnable() {
+        //     public void run() {
+        //         if (zombieList.size() > 0) {
+      
+        //         // Runs inside of the Swing UI thread
+        //         SwingUtilities.invokeLater(new Runnable() {
+        //           public void run() {
+        //             for (int i = 0; i < zombieList.size() ; i++) {
+        //                 if (!zombieList.get(i).isDead()) {
+        //                     zombieList.get(i).draw((Graphics2D) g);
+        //                     }
+        //                         try {
+        //                             java.lang.Thread.sleep(1000);
+        //                             System.out.println("berhasil1");
+        //                           }
+        //                           catch(Exception e) { 
+        //                               System.out.println("gagal1");
+        //                           }
+        //                     }
+        //           }
+        //         });
+                
+        //       }
+        //     }
+        //   }).start();
+       
         // zombie
         // if (zombieList.size() > 0) {
         //     for (int i = 0; i < zombieList.size(); i++) {
@@ -125,13 +166,48 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent e) {
         timer.start();
 
-        // if (zombieList.size() > 0) {
-        //     for (int i = 0; i < zombieList.size() ; i++) {
-        //         if (!zombieList.get(i).isDead()) {
-        //             zombieList.get(i).zombieWalk();
-        //         }
-        //     }
-        // }
+
+        // Runs outside of the Swing UI thread
+    //     new Thread(new Runnable() {
+    //     public void run() {
+    //         if (zombieList.size() > 0) {
+  
+    //         // Runs inside of the Swing UI thread
+    //         SwingUtilities.invokeLater(new Runnable() {
+    //           public void run() {
+    //             for (int i = 0; i < zombieList.size() ; i++) {
+    //                         if (!zombieList.get(i).isDead()) {
+    //                             zombieList.get(i).zombieWalk();
+    //                         }
+    //                         try {
+    //                             java.lang.Thread.sleep(100);
+    //                             System.out.println("berhasil");
+    //                           }
+    //                           catch(Exception e) {
+    //                               System.out.println("gagal");
+    //                            }
+    //                     }
+    //           }
+    //         });
+            
+    //       }
+    //     }
+    //   }).start();
+
+
+
+
+
+
+
+
+        if (zombieList.size() > 0) {
+            for (int i = 0; i < zombieList.size() ; i++) {
+                if (!zombieList.get(i).isDead()) {
+                    zombieList.get(i).zombieWalk();
+                }
+            }
+        }
 
         if (shotList.size() > 0) {
             for (int i = 0; i < shotList.size() ; i++) {

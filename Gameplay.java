@@ -72,7 +72,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         setFocusTraversalKeysEnabled(false);
         timer = new Timer(delay, this);
         backImage = Toolkit.getDefaultToolkit().createImage("background.jpg");
-        backGameOverImage = Toolkit.getDefaultToolkit().createImage("rsz_gameoverback.jpg");
+        backGameOverImage = Toolkit.getDefaultToolkit().createImage("gameoverback.png");
         cardplant1 = Toolkit.getDefaultToolkit().createImage("peashooterCard.png");
         cardplant2 = Toolkit.getDefaultToolkit().createImage("fungusCard.png");
         cardplant1bw = Toolkit.getDefaultToolkit().createImage("peashooterCardbw.png");
@@ -193,8 +193,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         // game over
         if (gameStatus.equals("gameOver")) {
             // g2d.drawString("game over", 800, 20);
-            g.setColor(Color.BLACK);
-            g.fillRect(0,0,997,808);
+            // g.setColor(Color.BLACK);
+            // g.fillRect(0,0,997,808);
             g.drawImage(backGameOverImage, 0, 0, null);
         }
 

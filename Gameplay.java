@@ -488,7 +488,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         try {
             counterGenerateZombie++;
             if (counterGenerateZombie % modGenerateZombie == 0) {
-                modGenerateZombie--;
+                if (modGenerateZombie > 2) {
+                    modGenerateZombie--;
+                }
                 Zombie newZombie = (Zombie) zombieSelection.get(take).clone();
                 zombieList.add(newZombie);
                 System.out.println("take" + take);

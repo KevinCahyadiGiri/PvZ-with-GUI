@@ -90,12 +90,12 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         // peaList = new ArrayList<Peashooter>();
         zombieSelection.add(new RegularZombie(900,140));
         zombieSelection.add(new RegularZombie(900,250));
-        zombieSelection.add(new RegularZombie(900,360));
-        zombieSelection.add(new RegularZombie(900,490));
-        zombieSelection.add(new RegularZombie(900,600));
         zombieSelection.add(new Zomboss(900,140));
         zombieSelection.add(new Zomboss(900,250));
         zombieSelection.add(new Zomboss(900,360));
+        zombieSelection.add(new RegularZombie(900,360));
+        zombieSelection.add(new RegularZombie(900,490));
+        zombieSelection.add(new RegularZombie(900,600));
         zombieSelection.add(new Zomboss(900,490));
         zombieSelection.add(new Zomboss(900,600));
         plantToShot = new ListMap<String, Shot>();

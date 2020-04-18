@@ -67,6 +67,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
 
     private String gameStatus;
     public boolean isGameOver;
+    public int zombiesKilled = 0;
 
     public Gameplay() {
         addKeyListener(this);
@@ -202,6 +203,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
             // g.fillRect(0,0,997,808);
             g.drawImage(backGameOverImage, 0, 0, null);
             Sound.endmusic.loop();
+            Font  fgameover  = new Font(Font.SANS_SERIF,  Font.BOLD, 25);
+            g2d.setFont(fgameover);
+            g2d.drawString("Zombies killed: "+String.valueOf(zombiesKilled), 35, 280);
         }
 
         g2d.drawString("mouse berada pada (" + mouse.x + "," + mouse.y + ")", 800, 10);
@@ -430,6 +434,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
                         if (zombieList.get(i).getHp() <= 0) {
                             zombieList.get(i).zombieDead();
                             zombieList.remove(i);
+                            zombiesKilled++;
                             break;
                         }
                     }

@@ -23,7 +23,7 @@ public class Main extends JFrame{
         // b.setBounds(0,0,80,120);
         
         //MAIN MENU
-        JButton playButton = new JButton("START GAME");
+        JButton playButton = new JButton(new ImageIcon("introbg.jpg"));
         mainMenu.add(playButton);
         mainMenu.setBounds(10,10,997,808);
         mainMenu.setTitle("Plants vs Zombie");

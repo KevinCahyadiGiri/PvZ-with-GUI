@@ -56,6 +56,6 @@ public class Main extends JFrame{
         // obj.add(b);
         
         //cara tahu index yang didapat
-        (new Thread(new IndexInject(10))).start();
+        // (new Thread(new IndexInject(10))).start();
     }
 }

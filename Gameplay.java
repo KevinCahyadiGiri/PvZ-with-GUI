@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.Toolkit;
 import java.awt.Point;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import javax.swing.JButton;
@@ -190,6 +191,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         }
 
         Graphics2D g2d = (Graphics2D) g;
+        Graphics2D g3d = (Graphics2D) g;
         // game over
         if (gameStatus.equals("gameOver")) {
             // g2d.drawString("game over", 800, 20);
@@ -199,8 +201,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         }
 
         g2d.drawString("mouse berada pada (" + mouse.x + "," + mouse.y + ")", 800, 10);
-        g2d.drawString(String.valueOf(sunfPoint), 50, 110);
-
+        g3d.drawString(String.valueOf(sunfPoint), 50, 110);
+        g3d.setFont(new Font(Font.SERIF, Font.BOLD, 18));
         g.dispose();
     }
 

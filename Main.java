@@ -25,7 +25,6 @@ public class Main extends JFrame{
         //MAIN MENU
         JButton playButton = new JButton("START GAME");
         mainMenu.add(playButton);
-        
         mainMenu.setBounds(10,10,997,808);
         mainMenu.setTitle("Plants vs Zombie");
         mainMenu.setResizable(false);

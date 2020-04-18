@@ -16,7 +16,7 @@ public class Main extends JFrame{
     public static void main(String[] args) {
         JFrame mainMenu = new JFrame();
         
-        Sound.bgmusic.loop();
+        Sound.intromusic.loop();
         
         //Try 1
         // JButton b=new JButton(new ImageIcon("peashooterCard.png"));
@@ -34,9 +34,11 @@ public class Main extends JFrame{
         playButton.addActionListener(new java.awt.event.ActionListener(){
             public void actionPerformed(java.awt.event.ActionEvent evt){  
                 mainMenu.setVisible(false);
+                Sound.intromusic.stop();
                 //GAME DIMULAI
                 JFrame obj = new JFrame();
                 Gameplay gameplay = new Gameplay();
+                Sound.bgmusic.loop();
                 obj.setBounds(10,10,997,808);
                 obj.setTitle("Plants vs Zombie");
                 obj.setResizable(false);

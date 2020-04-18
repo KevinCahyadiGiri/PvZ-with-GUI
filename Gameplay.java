@@ -434,7 +434,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
                         if (zombieList.get(i).getHp() <= 0) {
                             zombieList.get(i).zombieDead();
                             zombieList.remove(i);
-                            zombiesKilled++;
+                            if(!isGameOver){
+                                zombiesKilled++;
+                            }
                             break;
                         }
                     }

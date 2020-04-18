@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
+import javax.swing.plaf.FontUIResource;
 
 //import org.graalvm.compiler.hotspot.replacements.NewObjectSnippets.Templates;
 //import sun.awt.AWTAccessor.MouseEventAccessor;
@@ -201,8 +202,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         }
 
         g2d.drawString("mouse berada pada (" + mouse.x + "," + mouse.y + ")", 800, 10);
-        g3d.drawString(String.valueOf(sunfPoint), 50, 110);
-        g3d.setFont(new Font(Font.SERIF, Font.BOLD, 18));
+        Font  f3  = new Font(Font.SANS_SERIF,  Font.BOLD, 25);
+        g3d.setFont(f3);
+        g3d.drawString(String.valueOf(sunfPoint), 35, 110);
         g.dispose();
     }
 

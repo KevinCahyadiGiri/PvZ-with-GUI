@@ -1,15 +1,15 @@
 # PvZ-with-GUI
-Untuk mengeksekusi program, kita perlu meng-compile beberapa berikut Main.java Gameplay.java Zombie.java Shot.java Peashooter.java PeaShot.java Sun.java Sound.java  dan IndexInject.java
+* Untuk mengeksekusi program, kita perlu meng-compile beberapa berikut Main.java Gameplay.java Zombie.java Shot.java Peashooter.java PeaShot.java Sun.java Sound.java  dan IndexInject.java
 
-lakukan command berikut ini untuk melakukan compile
+* lakukan command berikut ini untuk melakukan compile
 ////
 compile : javac Main.java Gameplay.java Zombie.java Shot.java Peashooter.java PeaShot.java Sun.java Sound.java IndexInject.java
-<<<<<<< HEAD
 ////
-=======
 
+* Untuk menjalankan program silakan melakukan command berikut ini
+/////
 run : java Main
->>>>>>> a3df18e217f84caa4f6a802c4804ab3bb078c947
+/////
 
 
 Saat program berhasil dijalankan, maka kita akan dialihkan ke Main Menu

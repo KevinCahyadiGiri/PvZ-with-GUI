@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.Toolkit;
 import java.awt.Point;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import javax.swing.JButton;
@@ -15,6 +16,7 @@ import javax.swing.ImageIcon;
 
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
+import javax.swing.plaf.FontUIResource;
 
 //import org.graalvm.compiler.hotspot.replacements.NewObjectSnippets.Templates;
 //import sun.awt.AWTAccessor.MouseEventAccessor;
@@ -64,6 +66,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
     Thread t;
 
     private String gameStatus;
+    public boolean isGameOver;
+    public int zombiesKilled = 0;
+    private boolean endsoundplayed;
 
     public Gameplay() {
         addKeyListener(this);
@@ -90,12 +95,12 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         // peaList = new ArrayList<Peashooter>();
         zombieSelection.add(new RegularZombie(900,140));
         zombieSelection.add(new RegularZombie(900,250));
-        zombieSelection.add(new RegularZombie(900,360));
-        zombieSelection.add(new RegularZombie(900,490));
-        zombieSelection.add(new RegularZombie(900,600));
         zombieSelection.add(new Zomboss(900,140));
         zombieSelection.add(new Zomboss(900,250));
         zombieSelection.add(new Zomboss(900,360));
+        zombieSelection.add(new RegularZombie(900,360));
+        zombieSelection.add(new RegularZombie(900,490));
+        zombieSelection.add(new RegularZombie(900,600));
         zombieSelection.add(new Zomboss(900,490));
         zombieSelection.add(new Zomboss(900,600));
         plantToShot = new ListMap<String, Shot>();
@@ -113,6 +118,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         });
         // count = 0;
         gameStatus = "playing";
+        isGameOver = false;
+        endsoundplayed = false;
         timer.start();
         inject = new IndexInject(10);
         t = new Thread(inject);
@@ -190,17 +197,27 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
         }
 
         Graphics2D g2d = (Graphics2D) g;
+        Graphics2D g3d = (Graphics2D) g;
         // game over
+        
         if (gameStatus.equals("gameOver")) {
             // g2d.drawString("game over", 800, 20);
             // g.setColor(Color.BLACK);
             // g.fillRect(0,0,997,808);
             g.drawImage(backGameOverImage, 0, 0, null);
+            Font  fgameover  = new Font(Font.SANS_SERIF,  Font.BOLD, 25);
+            g2d.setFont(fgameover);
+            g2d.drawString("Zombies killed: "+String.valueOf(zombiesKilled), 35, 280);
+            if (!endsoundplayed){
+                Sound.endmusic.loop();
+                endsoundplayed=true;
+            }
         }
 
         g2d.drawString("mouse berada pada (" + mouse.x + "," + mouse.y + ")", 800, 10);
-        g2d.drawString(String.valueOf(sunfPoint), 50, 110);
-
+        Font  f3  = new Font(Font.SANS_SERIF,  Font.BOLD, 25);
+        g3d.setFont(f3);
+        g3d.drawString(String.valueOf(sunfPoint), 35, 110);
         g.dispose();
     }
 
@@ -423,6 +440,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
                         if (zombieList.get(i).getHp() <= 0) {
                             zombieList.get(i).zombieDead();
                             zombieList.remove(i);
+                            if(!isGameOver){
+                                zombiesKilled++;
+                            }
                             break;
                         }
                     }
@@ -505,6 +525,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener, Mou
             for (int i = 0; i < zombieList.size(); i++) {
                 if (zombieList.get(i).zombieGetX() < 90) {
                     gameStatus = "gameOver";
+                    isGameOver = true;
+                    Sound.bgmusic.stop();
                 }
             }
         }

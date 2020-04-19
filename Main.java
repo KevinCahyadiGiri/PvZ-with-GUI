@@ -14,13 +14,39 @@ public class Main extends JFrame{
     //     add(plant1);
     // }
     public static void main(String[] args) {
-        JFrame obj = new JFrame();
-        Gameplay gameplay = new Gameplay();
-        Sound.bgmusic.loop();
+        JFrame mainMenu = new JFrame();
+        
+        Sound.intromusic.loop();
+        
         //Try 1
         // JButton b=new JButton(new ImageIcon("peashooterCard.png"));
         // b.setBounds(0,0,80,120);
         
+        //MAIN MENU
+        JButton playButton = new JButton(new ImageIcon("introbg.jpg"));
+        mainMenu.add(playButton);
+        mainMenu.setBounds(10,10,997,808);
+        mainMenu.setTitle("Plants vs Zombie");
+        mainMenu.setResizable(false);
+        mainMenu.setVisible(true);
+        mainMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        playButton.addActionListener(new java.awt.event.ActionListener(){
+            public void actionPerformed(java.awt.event.ActionEvent evt){  
+                mainMenu.setVisible(false);
+                Sound.intromusic.stop();
+                //GAME DIMULAI
+                JFrame obj = new JFrame();
+                Gameplay gameplay = new Gameplay();
+                Sound.bgmusic.loop();
+                obj.setBounds(10,10,997,808);
+                obj.setTitle("Plants vs Zombie");
+                obj.setResizable(false);
+                obj.setVisible(true);
+                obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                obj.add(gameplay); 
+            }
+        });
+
 
         // Try 2
         // JButton buttonBrowse = new JButton();
@@ -29,13 +55,8 @@ public class Main extends JFrame{
         // buttonBrowse.setFocusPainted(false);
         // buttonBrowse.setContentAreaFilled(false);
         // obj.add(b);
-        obj.setBounds(10,10,997,808);
-        obj.setTitle("Plants vs Zombie");
-        obj.setResizable(false);
-        obj.setVisible(true);
-        obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        obj.add(gameplay);
+        
         //cara tahu index yang didapat
-        (new Thread(new IndexInject(10))).start();
+        // (new Thread(new IndexInject(10))).start();
     }
 }

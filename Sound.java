@@ -4,6 +4,8 @@ public class Sound {
     private Clip clip;
 
     public static Sound bgmusic = new Sound("background.wav");
+    public static Sound intromusic = new Sound("intromusic.wav");
+    public static Sound endmusic = new Sound("endmusic.wav");
 
     public Sound (String fileName) {
 
